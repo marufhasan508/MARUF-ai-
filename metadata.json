@@ -1,0 +1,10 @@
+{
+  "name": "MONEY HUNTER",
+  "description": "Professional AI Trading Image Analyzer and Chat Assistant for chart patterns, trends, and market insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "Image Analysis",
+    "Real-time Chat",
+    "Trading Insights"
+  ]
+}
