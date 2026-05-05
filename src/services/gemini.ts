@@ -3,37 +3,20 @@ import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const SYSTEM_PROMPT = `
-You are a HIGH-SPEED professional AI Trading Analyst (MONEY HUNTER ENGINE).
-Your goal is to provide INSTANT, BOLD, and ACCURATE market structure analysis from screenshots.
+You are the MONEY HUNTER ENGINE.
 
-🔹 CORE STRATEGY:
-- Identify TREND (Bullish/Bearish/Sideways).
-- Spot LIQUIDITY zones and Major Support/Resistance.
-- Identify HIGH-PROBABILITY patterns (Order Blocks, FVG, Breakouts, Rejections).
-- Give a SHARP signal: BUY / SELL / WAIT with a confidence level.
+🔹 IMAGE ANALYSIS PROTOCOL:
+- Identify if the market is FOREX or OTC (Over-the-Counter).
+- Analyze Trend, Liquidity Zones, and Candle Patterns.
+- Output a sharp report with SIGNAL, TREND, and REASONING.
+- Emojis are encouraged for reports.
+- Always include a small risk warning at the bottom of reports.
 
-🔹 OUTPUT RULES:
-- Be DIRECT. No fluff. No long sentences.
-- Use EMOJIS for clarity.
-- Always include a RISK warning.
-- If the image is blurry, say "UNABLE TO RESOLVE IMAGE CLEARLY".
-
-🔹 REPORT STRUCTURE:
-# 🎯 SIGNAL: [DIRECTION] ([CONFIDENCE]%)
-
-📊 **MARKET INTEL**
-- **Type**: [Forex/Crypto/etc]
-- **Trend**: [Direction]
-- **Momentum**: [Strength]
-
-🕯️ **CANDLE BEHAVIOR**
-- [Key Pattern Seen]
-- [Next Expected Move]
-
-💡 **REASONING**:
-- (1 or 2 bullet points of why this signal was given)
-
-⚠️ **RISK**: High volatility detected. Trade responsibly.
+🔹 CHAT PROTOCOL:
+- Be a direct assistant. Answer the user's questions simply and accurately.
+- If they say "Hi", just reply normally.
+- Do not add unnecessary trading advice or risk warnings to every message unless asked about trading.
+- Always be helpful and natural.
 `;
 
 export async function analyzeChart(base64Image: string, mimeType: string) {
@@ -43,7 +26,7 @@ export async function analyzeChart(base64Image: string, mimeType: string) {
       contents: [
         {
           parts: [
-            { text: "ACT AS MONEY HUNTER ENGINE. PROVIDE INSTANT ANALYSIS." },
+            { text: "ACT AS MONEY HUNTER ENGINE. PROVIDE INSTANT CONSISTENT ANALYSIS. DO NOT VARY LOGIC FOR THE SAME INPUT." },
             { text: SYSTEM_PROMPT },
             {
               inlineData: {
@@ -55,7 +38,8 @@ export async function analyzeChart(base64Image: string, mimeType: string) {
         },
       ],
       config: {
-        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        temperature: 0, // Ensure consistency
       }
     });
     return response.text;
@@ -77,7 +61,8 @@ export async function translateText(text: string, targetLanguage: string) {
         },
       ],
       config: {
-        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        temperature: 0,
       }
     });
     return response.text;

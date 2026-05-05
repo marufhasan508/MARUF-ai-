@@ -34,6 +34,7 @@ export default function App() {
   const [isChatting, setIsChatting] = useState(false);
   const [language, setLanguage] = useState('English');
   const [isTranslating, setIsTranslating] = useState(false);
+  const [analysisCache, setAnalysisCache] = useState<Record<string, string>>({});
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const loadingMessages = [
@@ -77,11 +78,25 @@ export default function App() {
   };
 
   const triggerAnalysis = async (base64: string, type: string) => {
+    // Check cache first for consistency
+    if (analysisCache[base64]) {
+      setIsAnalyzing(true);
+      // Simulate analysis phase for UI consistency
+      setTimeout(() => {
+        setAnalysis(analysisCache[base64]);
+        setIsAnalyzing(false);
+      }, 1500);
+      return;
+    }
+
     setIsAnalyzing(true);
     setAnalysis(null);
     try {
       const result = await analyzeChart(base64, type);
-      setAnalysis(result || "Failed to get analysis. Please try again.");
+      const reportContent = result || "Failed to get analysis. Please try again.";
+      setAnalysis(reportContent);
+      // Cache the result
+      setAnalysisCache(prev => ({ ...prev, [base64]: reportContent }));
     } catch (err) {
       console.error(err);
       setAnalysis("Error analyzing chart. Check your connection or image quality.");
@@ -135,29 +150,48 @@ export default function App() {
     setMimeType('');
   };
 
+  const [activeTab, setActiveTab] = useState<'analysis' | 'chat'>('analysis');
+
   return (
-    <div className="min-h-screen bg-[#0B0E11] text-[#EAECEF] font-sans overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-[#0B0E11] text-[#EAECEF] font-sans h-screen flex flex-col">
       {/* Header */}
-      <header className="h-16 border-b border-[#2B2F36] flex items-center justify-between px-6 bg-[#181A20] shrink-0">
+      <header className="h-16 border-b border-[#2B2F36] flex items-center justify-between px-4 md:px-6 bg-[#181A20] shrink-0 z-20">
         <div className="flex items-center gap-3">
           <div className="bg-[#F0B90B] p-2 rounded-lg">
-            <TrendingUp className="text-[#181A20] w-5 h-5" />
+            <TrendingUp className="text-[#181A20] w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">MONEY <span className="text-[#F0B90B]">HUNTER</span></h1>
+          <h1 className="text-lg md:text-xl font-bold tracking-tight">MONEY <span className="text-[#F0B90B]">HUNTER</span></h1>
         </div>
-        <div className="flex items-center gap-4 text-sm font-medium">
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-[#2B3139] rounded-full text-[#0ECB81] border border-[#0ECB81]/20">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#0ECB81] animate-pulse" />
-            LIVE MARKET CONNECTED
+        <div className="flex items-center gap-2 md:gap-4 text-[10px] md:text-sm font-medium">
+          <div className="flex items-center gap-1.5 px-2 md:px-3 py-1 bg-[#2B3139] rounded-full text-[#0ECB81] border border-[#0ECB81]/20">
+            <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#0ECB81] animate-pulse" />
+            <span className="hidden xs:inline">LIVE ENGINE ACTIVE</span>
+            <span className="xs:hidden">LIVE</span>
           </div>
         </div>
       </header>
 
+      {/* Mobile Tab Navigation */}
+      <div className="xl:hidden flex bg-[#181A20] border-b border-[#2B2F36] shrink-0">
+        <button 
+          onClick={() => setActiveTab('analysis')}
+          className={`flex-1 py-3 text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'analysis' ? 'text-[#F0B90B] border-b-2 border-[#F0B90B] bg-[#F0B90B]/5' : 'text-[#848E9C]'}`}
+        >
+          <Zap className="w-4 h-4" /> ANALYSIS
+        </button>
+        <button 
+          onClick={() => setActiveTab('chat')}
+          className={`flex-1 py-3 text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'chat' ? 'text-[#F0B90B] border-b-2 border-[#F0B90B] bg-[#F0B90B]/5' : 'text-[#848E9C]'}`}
+        >
+          <MessageSquare className="w-4 h-4" /> ENGINE CHAT
+        </button>
+      </div>
+
       {/* Main Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Left Section: Analysis & Upload */}
-        <main className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 scrollbar-hide">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <main className={`flex-1 overflow-y-auto p-4 md:p-6 flex flex-col gap-6 scrollbar-hide ${activeTab === 'chat' ? 'hidden xl:flex' : 'flex'}`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 items-start">
             
             {/* Chart Upload Card */}
             <motion.div 
@@ -347,8 +381,8 @@ export default function App() {
         </main>
 
         {/* Right Section: Chat Interface */}
-        <aside className="w-[380px] border-l border-[#2B2F36] bg-[#181A20] flex flex-col shrink-0 hidden xl:flex">
-          <div className="p-4 border-b border-[#2B2F36] flex items-center justify-between">
+        <aside className={`xl:w-[380px] border-l border-[#2B2F36] bg-[#181A20] flex-col shrink-0 z-10 transition-all duration-300 ${activeTab === 'chat' ? 'flex fixed inset-0 top-[108px] xl:static xl:flex' : 'hidden xl:flex'}`}>
+          <div className="p-4 border-b border-[#2B2F36] flex items-center justify-between bg-[#1E2329] xl:bg-transparent">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-[#F0B90B]" />
               <h2 className="font-bold text-sm">TRADING CHAT AI</h2>
