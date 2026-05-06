@@ -23,7 +23,20 @@ import ReactMarkdown from 'react-markdown';
 import { analyzeChart, chatAboutTrading, translateText } from './services/gemini';
 import { Message } from './types';
 
+const APP_CONFIG = {
+  LICENSE_KEY: "HUNTER_PRO", // Change this to update the required password
+  LICENSE_EXPIRY: "2026-05-09", // Format: YYYY-MM-DD. Change this to extend/reduce validity
+  CONTACT_LINK: "https://t.me/Xmaruf09",
+  CONTACT_TEXT: "@Xmaruf09",
+  TELEGRAM_CHANNEL: "https://t.me/shooter_by_1x",
+  CHANNEL_TEXT: "shooter_by_1x"
+};
+
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [licenseInput, setLicenseInput] = useState('');
+  const [loginError, setLoginError] = useState('');
+
   const [image, setImage] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState<string>('');
   const [analysis, setAnalysis] = useState<string | null>(null);
@@ -151,6 +164,98 @@ export default function App() {
   };
 
   const [activeTab, setActiveTab] = useState<'analysis' | 'chat'>('analysis');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (licenseInput.trim() === APP_CONFIG.LICENSE_KEY) {
+      if (today <= APP_CONFIG.LICENSE_EXPIRY) {
+        setIsAuthenticated(true);
+      } else {
+        setLoginError("License has expired. Please contact admin to renew.");
+      }
+    } else {
+      setLoginError("Invalid license key.");
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0B0E11] text-[#EAECEF] font-sans flex flex-col items-center justify-center p-4 relative overflow-hidden">
+        {/* Background Accents */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F0B90B] rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#0ECB81] rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#181A20] border border-[#2B2F36] rounded-2xl w-full max-w-md shadow-2xl relative z-10"
+        >
+          <div className="p-8 text-center border-b border-[#2B2F36]">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#F0B90B] rounded-2xl mb-6 shadow-[0_0_30px_rgba(240,185,11,0.3)]">
+              <TrendingUp className="text-[#181A20] w-8 h-8" />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight mb-2">MONEY <span className="text-[#F0B90B]">HUNTER</span></h1>
+            <p className="text-[#848E9C] text-sm">SECURE ANALYTICS ENGINE</p>
+          </div>
+
+          <div className="p-8">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label className="block text-xs font-mono uppercase tracking-widest text-[#848E9C] mb-2">License Key</label>
+                <input 
+                  type="password"
+                  value={licenseInput}
+                  onChange={(e) => setLicenseInput(e.target.value)}
+                  placeholder="Enter access code..."
+                  className="w-full bg-[#2B3139] border border-transparent focus:border-[#F0B90B] rounded-xl py-3 px-4 outline-none text-sm transition-all text-[#EAECEF] placeholder:text-[#474D57]"
+                />
+              </div>
+
+              {loginError && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-xs flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+
+              <button 
+                type="submit"
+                className="w-full bg-[#F0B90B] hover:bg-[#D4A30A] text-[#181A20] font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(240,185,11,0.2)]"
+              >
+                AUTHORIZE ACCESS <ChevronRight className="w-4 h-4" />
+              </button>
+            </form>
+
+            <div className="mt-8 pt-6 border-t border-[#2B2F36] flex items-center justify-between text-xs text-[#848E9C]">
+              <div className="flex flex-col">
+                <span className="uppercase tracking-wider text-[10px] opacity-70 mb-1">License Expiry</span>
+                <span className="font-mono text-[#F0B90B]">{APP_CONFIG.LICENSE_EXPIRY}</span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="uppercase tracking-wider text-[10px] opacity-70 mb-1">Need Access? Contact</span>
+                <a 
+                  href={APP_CONFIG.CONTACT_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[#0088cc] hover:underline flex items-center gap-1"
+                >
+                  <Send className="w-3 h-3" />
+                  {APP_CONFIG.CONTACT_TEXT}
+                </a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        <div className="mt-8 text-center text-[10px] text-[#474D57] font-mono opacity-50 z-10">
+          MONEY HUNTER ANALYTICS ENGINE v1.0.4 - SYSTEM SECURE
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0B0E11] text-[#EAECEF] font-sans h-screen flex flex-col">
