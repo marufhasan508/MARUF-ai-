@@ -25,7 +25,7 @@ import { Message } from './types';
 
 const APP_CONFIG = {
   LICENSE_KEY: "HUNTER_PRO", // Change this to update the required password
-  LICENSE_EXPIRY: "2026-05-09", // Format: YYYY-MM-DD. Change this to extend/reduce validity
+  LICENSE_EXPIRY: "2026-05-20", // Format: YYYY-MM-DD. Change this to extend/reduce validity
   CONTACT_LINK: "https://t.me/Xmaruf09",
   CONTACT_TEXT: "@Xmaruf09",
   TELEGRAM_CHANNEL: "https://t.me/shooter_by_1x",
