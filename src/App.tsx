@@ -28,8 +28,8 @@ const APP_CONFIG = {
   LICENSE_EXPIRY: "2026-09-10", // Format: YYYY-MM-DD. Change this to extend/reduce validity
   CONTACT_LINK: "https://t.me/Xmaruf09",
   CONTACT_TEXT: "@Xmaruf09",
-  TELEGRAM_CHANNEL: "https://t.me/shooter_by_1x",
-  CHANNEL_TEXT: "shooter_by_1x"
+  TELEGRAM_CHANNEL: "https://t.me/secret_trader",
+  CHANNEL_TEXT: "Sceret Trader"
 };
 
 export default function App() {
