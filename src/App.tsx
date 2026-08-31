@@ -466,12 +466,12 @@ export default function App() {
               <div className="flex flex-col gap-1 items-end">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-[#474D57]">Official Source</span>
                 <a 
-                  href="https://t.me/shooter_by_1x" 
+                  href="https://t.me/secret_trader" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-[#0088cc] transition-colors group"
                 >
-                  <span className="font-mono text-xs">Channel: shooter_by_1x</span>
+                  <span className="font-mono text-xs">Channel: Secret Trader</span>
                   <div className="w-5 h-5 flex items-center justify-center bg-[#0088cc]/10 rounded group-hover:bg-[#0088cc]/20">
                     <Send className="w-3 h-3 text-[#0088cc]" />
                   </div>
