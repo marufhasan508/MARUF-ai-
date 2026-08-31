@@ -197,7 +197,7 @@ export default function App() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-[#F0B90B] rounded-2xl mb-6 shadow-[0_0_30px_rgba(240,185,11,0.3)]">
               <TrendingUp className="text-[#181A20] w-8 h-8" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight mb-2">MONEY <span className="text-[#F0B90B]">HUNTER</span></h1>
+            <h1 className="text-2xl font-bold tracking-tight mb-2">SECRET <span className="text-[#F0B90B]">TRADER</span></h1>
             <p className="text-[#848E9C] text-sm">SECURE ANALYTICS ENGINE</p>
           </div>
 
@@ -251,7 +251,7 @@ export default function App() {
         </motion.div>
         
         <div className="mt-8 text-center text-[10px] text-[#474D57] font-mono opacity-50 z-10">
-          MONEY HUNTER ANALYTICS ENGINE v1.0.4 - SYSTEM SECURE
+          SECRET TRADER ANALYTICS ENGINE v1.0.4 - SYSTEM SECURE
         </div>
       </div>
     );
@@ -480,7 +480,7 @@ export default function App() {
             </div>
             
             <div className="text-center text-[10px] text-[#474D57] font-mono py-2 opacity-50">
-              MONEY HUNTER ANALYTICS ENGINE v1.0.4 - SYSTEM SECURE
+              SECRET TRADER ANALYTICS ENGINE v1.0.4 - SYSTEM SECURE
             </div>
           </footer>
         </main>
